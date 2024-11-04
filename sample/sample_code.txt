@@ -1,5 +1,3 @@
-FACT:
-
 PUSH AX
 PUSH BX+1
 

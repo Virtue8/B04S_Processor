@@ -7,9 +7,9 @@ CFLAGS = -c -Wshadow -Winit-self -Wredundant-decls -Wcast-align -Wundef -Wfloat-
 	-Wnon-virtual-dtor -Woverloaded-virtual -Wpointer-arith -Wsign-promo -Wstack-usage=8192 -Wstrict-aliasing   \
 	-Wstrict-null-sentinel -Wtype-limits -Wwrite-strings -Werror=vla -D_DEBUG -D_EJUDGE_CLIENT_SIDE
 
-INCLUDES = ./inc/ass.h ../../Include_file/error/error.h ../../Include_file/utilities/utils.h ../include/func_ass.h
+INCLUDES = header/asmb.h ../stack/stack.h ../utils/utils.h
 
-SOURCES = main.cpp ../../Include_file/error/error.cpp ../../Include_file/utilities/utils.cpp ass.cpp ../include/func_ass.cpp
+SOURCES = src/asmb.cpp main.cpp ../stack/stack.cpp ../utils/utils.cpp
 
 OBJECTS = $(SOURCES:.cpp=.o)
 

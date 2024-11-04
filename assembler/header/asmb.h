@@ -19,27 +19,22 @@
 
 const int ASMB_VERSION = 1;
 
-/*
-struct Label
-{
-    const char label[10] = "";      
-    int address = -1;
-    int is_define = -1;
-};
-*/
-
 struct Assembler
 {
+    FILE * asmb_file = NULL;
+    const char * file_name = NULL;
     char * Code = 0;
     int CodeSize = 0;
+    int LinesAmount = 0;
     int ip = 0;
-    int start_ip = -1;
+    //int start_ip = -1;
+    struct Command * Commands = NULL;
 };
 
-struct Line
+struct Command
 {
-    size_t Size;
-    char* Index;
+    size_t len = 0;
+    char * ptr = 0;
 };
 
 typedef unsigned long int ProcElem_t;
@@ -77,8 +72,10 @@ enum Registers
 
 //--------------------------------------------//
 
-void CodeAssemble (Assembler * asmb, Line * line, int LinesNum);
+void CodeReader (Assembler * asmb);
+void CodeSeparator (Assembler * asmb);
+void CommandIdentifier (Assembler * asmb);
+void CodeAssemble (Assembler * asmb, int LinesNum);
 void CodeOutput (Assembler * asmb, FILE * output_file);
-void CommandIdentifier (Assembler * asmb, Line * line);
 
 #endif
