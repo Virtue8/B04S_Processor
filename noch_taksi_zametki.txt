@@ -1,12 +1,12 @@
 !!!!!!!ASSEMBLER!!!!!!!
 
-Step 1:     sample_code and machine_code Opening and Bufferization
+(DONE)  Step 1:     sample_code and machine_code Opening and Bufferization
 
-Step 2:     Commands Identification and Replacing
+        Step 2:     Commands Identification and Replacing
 
-Step 3:     Assembling the Changed Lines
+        Step 3:     Assembling the Changed Lines
 
-Step 4:     Reworked Buffer Output
+        Step 4:     Reworked Buffer Output
 
 !!!!!!!PROCESSOR!!!!!!!
 

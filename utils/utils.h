@@ -11,8 +11,13 @@
 #include <sys/param.h>
 #include <stdio.h>
 
-#include "../assembler/header/asmb.h"
+#include "../assembler/asmb.h"
 
-size_t BufferLinesRefactorer (struct Assembler * asmb);
+//-----------------------------------------------------------------------//
+
+size_t GimmeFileSize (FILE * file);
+size_t BufferLinesRefactorer (char * code, size_t file_size);
+
+//-----------------------------------------------------------------------//
 
 #endif

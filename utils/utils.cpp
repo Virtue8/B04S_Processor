@@ -3,18 +3,34 @@
 
 #include "utils.h"
 
-size_t BufferLinesRefactorer (struct Assembler * asmb) 
+//-----------------------------------------------------------------------//
+
+size_t GimmeFileSize (FILE * file)
+{
+    struct stat st = {};
+    fstat (fileno (file), &st);
+    size_t file_size = (size_t) st.st_size;
+    assert (file_size != 0);
+
+    return file_size;
+}
+
+//-----------------------------------------------------------------------//
+
+size_t BufferLinesRefactorer (char * code, size_t file_size) 
 {
     size_t lines = 0;
-    for (size_t i = 0; i != asmb->CodeSize + 1; i++)
+    for (size_t i = 0; i != file_size + 1; i++)
     {
-        if ( *(asmb->Code + i) == '\n')
+        if ( *(code + i) == '\n')
         {
-            *(asmb->Code + i) = '\0';
+            *(code + i) = '\0';
             lines++;
         }
     }
     return lines + 1; 
 }
+
+//-----------------------------------------------------------------------//
 
 #endif
