@@ -20,6 +20,32 @@
 
 typedef unsigned long int ProcElem_t;
 
+const int COMMANDS_AMOUNT = 20;
+
+static const char * Command_Names[20]
+{
+    "HLT",
+    "PUSH",
+    "POP",
+    "JMP",
+    "JA",
+    "JAE",
+    "JB",
+    "JBE",
+    "JE",
+    "JNE",
+    "ADD",
+    "SUB",
+    "MUL",
+    "DIV",
+    "SQRT",
+    "POW",
+    "LN",
+    "SIN",
+    "COS",
+    "BACKSPACE"
+};
+
 enum Command_Codes
 {
     HLT,
@@ -41,7 +67,7 @@ enum Command_Codes
     LN,
     SIN,
     COS,
-    EXIT,
+    BACKSPACE,
 };
 
 enum Registers
@@ -57,11 +83,11 @@ const int ASMB_VERSION = 1;
 struct Assembler
 {
     FILE * file = NULL;
-    size_t file_size = 0;
-    char * file_name = NULL;
-
     FILE * output_file = NULL;
-    char * output_file_name = NULL;
+    size_t file_size = 0;
+
+    const char * file_name = NULL;
+    const char * output_file_name = NULL;
 
     char * code = 0;
     size_t lines_amount = 0;
@@ -72,22 +98,21 @@ struct Assembler
 
 struct Line
 {
-    // bool have_ram = false;
     size_t len = 0;
     char * ptr = 0;
     int args   = 0;
+    int words  = 0;
 };
 
 //---------------------- Collecting the sample_code Data ----------------------//
 
-FILE * FileOpener (char * file_name);
-char * CodeReader (FILE * file, size_t file_size, char * code);
 void CodeSeparator (Assembler * asmb);
 
-//------------------------ Reworking the sample_code --------------------------//
+//----------------- Reworking and Analyzing the sample_code -------------------//
 
-int CommandIdentifier (Assembler * asmb);
+void LineIdentifier (char * input_line, char * output_line);
 void CodeAssemble (Assembler * asmb);
+void MachineCodeWriter(Assembler * asmb, const char *output_code);
 void CoverTracks (Assembler * asmb);
 
 //--------------------------------------------//

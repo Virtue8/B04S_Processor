@@ -10,7 +10,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-#include "../../stack/stack.h"
+#include "../stack/stack.h"
 
 //--------------------------------------------------------//
 
