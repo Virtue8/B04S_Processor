@@ -16,12 +16,12 @@
 //---------------------------- Text Editing -----------------------------//
 
 size_t GimmeFileSize (FILE * file);
-size_t BufferLinesRefactorer (char * code, size_t file_size);
+size_t BufferLinesRefactorer (char * buffer);
 
 //---------------------------- File Reading -----------------------------//
 
 FILE * FileOpener (const char * file_name);
-char * CodeReader (FILE * file, size_t file_size, char * code);
+char * BufferCtor (FILE * file, size_t file_size);
 
 //-----------------------------------------------------------------------//
 

@@ -2,18 +2,37 @@
 #include "asmb.h"
 #include "../utils/utils.h"
 
+void asmbCtor (Assembler * asmb, const char * input_file_name, const char * output_file_name)
+{
+    assert (asmb != NULL);
+
+    asmb->file_name = input_file_name;                              //entering info about files names
+    asmb->output_file_name = output_file_name;
+
+    asmb->file = fopen (asmb->file_name, "rb");                               //opening sample_code  to read
+    asmb->output_file = fopen (asmb->output_file_name, "w");                  //opening machine_code to write
+}
+
+void asmbDtor (Assembler * asmb)
+{
+    assert (asmb != NULL);
+
+    free (asmb->code);
+    fclose (asmb->file);
+    fclose (asmb->output_file);
+}
+
 void CodeSeparator (Assembler * asmb)
 {
     assert (asmb != NULL);
 
-    asmb->lines_amount = BufferLinesRefactorer (asmb->code, asmb->file_size);
+    asmb->lines_amount = BufferLinesRefactorer (asmb->code);
 
     asmb->line = (Line *) calloc (asmb->lines_amount, sizeof(Line));
     assert (asmb->line != NULL);
 
     size_t prev_i_value = 0;
     int k = 0;
-    asmb->line[0].words = 1;
 
     for (size_t i = 0; i < asmb->file_size + 1; i++)
     {
@@ -24,16 +43,14 @@ void CodeSeparator (Assembler * asmb)
 
             prev_i_value = i;
             k += 1;
-            asmb->line[k].words = asmb->line[k].args + 1;
         }
-        
-        else if (asmb->code[i] == ' ')
-            asmb->line[k].args++;
     }
 }
 
 int GetCommandNumber(const char * command) 
 {
+    assert (command != NULL);
+
     for (int k = 0; k < COMMANDS_AMOUNT; k++)
     {
         if (strcmp(command, Command_Names[k]) == 0)
@@ -45,6 +62,9 @@ int GetCommandNumber(const char * command)
 
 void LineIdentifier (char * input_line, char * output_line)
 {
+    assert (input_line != NULL);
+    assert (output_line != NULL);
+
     char command[10] = "";
 
     int arg1 = 0;
@@ -61,16 +81,16 @@ void LineIdentifier (char * input_line, char * output_line)
         return;
     }
 
-    switch (words_amount) 
+    switch (words_amount)
     {
         case 1:
-            sprintf (output_line, "%d\0", command_number);
+            sprintf (output_line, "%d\n", command_number);
             break;
         case 2:
-            sprintf (output_line, "%d %d\0", command_number, arg1);
+            sprintf (output_line, "%d %d\n", command_number, arg1);
             break;
         case 3:
-            sprintf (output_line, "%d %d %d\0", command_number, arg1, arg2);
+            sprintf (output_line, "%d %d %d\n", command_number, arg1, arg2);
             break;
         default:
             fprintf (stderr, "Error: Invalid input format\n");
@@ -80,7 +100,7 @@ void LineIdentifier (char * input_line, char * output_line)
 
 void CodeAssemble (Assembler * asmb)
 {
-    char * output_code = (char *) calloc (10 * asmb->lines_amount, sizeof (int));
+    assert (asmb != NULL);
 
     for (int i = 0; i < asmb->lines_amount; i++)
     {
@@ -93,10 +113,7 @@ void CodeAssemble (Assembler * asmb)
                 input_line[q] = *(asmb->line[i].ptr + q);
 
             LineIdentifier (input_line, output_line);
-            sprintf (output_code, "%s\n", output_line);
-
-            fprintf (stdout, "%s\n", output_code);
-            MachineCodeWriter (asmb, output_code);
+            MachineCodeWriter (asmb, output_line);
         }
         else
         {
@@ -105,16 +122,15 @@ void CodeAssemble (Assembler * asmb)
                 input_line[q] = *(asmb->line[i].ptr + q);
 
             LineIdentifier (input_line, output_line);
-            sprintf (output_code, "%s\n", output_line);
-            MachineCodeWriter (asmb, output_code);
+            MachineCodeWriter (asmb, output_line);
         }
     }
-
-    free (output_code);
 }
 
 void MachineCodeWriter (Assembler * asmb, const char * output_code) 
 {
+    assert (asmb != NULL);
+
     if (asmb->output_file == NULL || output_code == NULL) 
     {
         fprintf (stderr, "Error: Invalid file pointer or buffer\n");
@@ -127,11 +143,4 @@ void MachineCodeWriter (Assembler * asmb, const char * output_code)
     {
         fprintf (stderr, "Error: Failed to write complete data to file\n");
     }
-}
-
-void CoverTracks (Assembler * asmb)
-{
-    free (asmb->code);
-    fclose (asmb->file);
-    fclose (asmb->output_file);
 }

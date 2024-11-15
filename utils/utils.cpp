@@ -15,14 +15,14 @@ size_t GimmeFileSize (FILE * file)
     return file_size;
 }
 
-size_t BufferLinesRefactorer (char * code, size_t file_size) 
+size_t BufferLinesRefactorer (char * buffer) 
 {
     size_t lines = 0;
-    for (size_t i = 0; i != file_size + 1; i++)
+    for (size_t i = 0; *(buffer + i + 1) != '\0'; i++)
     {
-        if ( *(code + i) == '\n')
+        if ( *(buffer + i) == '\n')
         {
-            *(code + i) = '\0';
+            *(buffer + i) = '\0';
             lines++;
         }
     }
@@ -39,20 +39,23 @@ FILE * FileOpener (const char * file_name)
     return file;
 }
 
-char * CodeReader (FILE * file, size_t file_size, char * code)
+char * BufferCtor (FILE * file, size_t file_size)
 {
-    code = (char *) calloc ((file_size + 1), sizeof(char));
-    assert (code != NULL);
+    assert (file != 0);
+    assert (file_size != 0);
 
-    size_t ReadStatus = fread (code, sizeof(char), file_size, file);
+    char * buffer = (char *) calloc ((file_size + 1), sizeof(char));
+    assert (buffer != NULL);
+
+    size_t ReadStatus = fread (buffer, sizeof(char), file_size, file);
     if (ReadStatus != file_size)
         printf ("Reading status is incorrect!\n");
 
-    *(code + file_size) = '\0';
+    *(buffer + file_size) = '\0';
 
     fclose (file);
 
-    return code;
+    return buffer;
 }
 
 //-----------------------------------------------------------------------//

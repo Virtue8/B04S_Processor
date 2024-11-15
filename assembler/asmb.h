@@ -46,7 +46,7 @@ static const char * Command_Names[20]
     "BACKSPACE"
 };
 
-enum Command_Codes
+enum CommandCodes
 {
     HLT,
     PUSH,
@@ -100,9 +100,12 @@ struct Line
 {
     size_t len = 0;
     char * ptr = 0;
-    int args   = 0;
-    int words  = 0;
 };
+
+//-------------------------- Assembling Service -------------------------//
+
+void asmbCtor (Assembler * asmb, const char * input_file_name, const char * output_file_name);
+void asmbDtor (Assembler * asmb);
 
 //---------------------- Collecting the sample_code Data ----------------------//
 
@@ -113,7 +116,6 @@ void CodeSeparator (Assembler * asmb);
 void LineIdentifier (char * input_line, char * output_line);
 void CodeAssemble (Assembler * asmb);
 void MachineCodeWriter(Assembler * asmb, const char *output_code);
-void CoverTracks (Assembler * asmb);
 
 //--------------------------------------------//
 
